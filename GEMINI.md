@@ -37,5 +37,9 @@ Nuestro enfoque se centra en tres pilares fundamentales que reemplazan la seguri
 *   `plan_desarrollo/`: Hojas de ruta detalladas por producto (EDR, ZTNA, Cloud Sec).
 *   `negocio/`: Estrategias de escalamiento y modelos comerciales.
 
+## 6. Definiciones Técnicas
+*   **Stack Tecnológico**: [stack_tecnologico.md](plan_desarrollo/stack_tecnologico.md) (Rust, Python, Go, Vue3).
+*   **Roadmap de Software**: [roadmap_software.md](plan_desarrollo/roadmap_software.md) (Detalle de módulos por producto).
+
 ---
 *Este archivo debe ser consultado al inicio de nuevas sesiones para alinear el contexto del asistente.*

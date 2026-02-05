@@ -1,0 +1,5 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running `target/debug/agent`
+Agent starting... Target: http://localhost:8080/heartbeat
+[SUCCESS] Heartbeat sent to http://localhost:8080/heartbeat
+[SUCCESS] Heartbeat sent to http://localhost:8080/heartbeat

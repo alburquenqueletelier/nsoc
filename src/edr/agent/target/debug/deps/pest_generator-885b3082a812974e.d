@@ -1,0 +1,11 @@
+/home/baal/Desktop/nsoc/src/edr/agent/target/debug/deps/pest_generator-885b3082a812974e.d: /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/lib.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/macros.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/docs.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/generator.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/parse_derive.rs
+
+/home/baal/Desktop/nsoc/src/edr/agent/target/debug/deps/libpest_generator-885b3082a812974e.rlib: /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/lib.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/macros.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/docs.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/generator.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/parse_derive.rs
+
+/home/baal/Desktop/nsoc/src/edr/agent/target/debug/deps/libpest_generator-885b3082a812974e.rmeta: /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/lib.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/macros.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/docs.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/generator.rs /home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/parse_derive.rs
+
+/home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/lib.rs:
+/home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/macros.rs:
+/home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/docs.rs:
+/home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/generator.rs:
+/home/baal/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/pest_generator-2.8.5/src/parse_derive.rs:
