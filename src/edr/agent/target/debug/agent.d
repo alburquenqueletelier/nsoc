@@ -1,1 +1,1 @@
-/home/baal/Desktop/nsoc/src/edr/agent/target/debug/agent: /home/baal/Desktop/nsoc/src/edr/agent/src/main.rs
+/home/baal/Desktop/nsoc/src/edr/agent/target/debug/agent: /home/baal/Desktop/nsoc/src/edr/agent/src/command_executor.rs /home/baal/Desktop/nsoc/src/edr/agent/src/log_collector.rs /home/baal/Desktop/nsoc/src/edr/agent/src/main.rs /home/baal/Desktop/nsoc/src/edr/agent/src/process_monitor.rs

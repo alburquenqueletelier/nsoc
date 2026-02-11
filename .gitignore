@@ -1,0 +1,66 @@
+########################
+# Rust (EDR Agent)
+########################
+# Directorios de build de Rust
+target/
+src/edr/agent/target/
+
+########################
+# Go (Backend)
+########################
+# Binarios compilados en la raíz
+/backend
+/backend.exe
+
+# Binario compilado dentro del backend de EDR
+src/edr/backend/backend
+
+# Logs del backend
+backend.log
+
+########################
+# Python (Brain y otros scripts)
+########################
+__pycache__/
+*/__pycache__/
+**/__pycache__/
+*.py[cod]
+*.pyo
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+
+########################
+# Frontend / Node (para futuro Vue3)
+########################
+node_modules/
+dist/
+build/
+.npmrc
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+########################
+# Archivos de sistema / editor
+########################
+.DS_Store
+Thumbs.db
+
+.idea/
+.vscode/
+
+*.swp
+*.swo
+*~
+
+########################
+# Logs y temporales generales
+########################
+*.log
+*.tmp
+tmp/
+temp/
