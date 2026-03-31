@@ -1,19 +1,19 @@
 ########################
 # Rust (EDR Agent)
 ########################
-# Directorios de build de Rust
+# Directorios de build de Rust — nunca commitear binarios/artifacts
 target/
-src/edr/agent/target/
+**/target/
 
 ########################
 # Go (Backend)
 ########################
-# Binarios compilados en la raíz
+# Binarios compilados — nunca commitear
 /backend
 /backend.exe
-
-# Binario compilado dentro del backend de EDR
 src/edr/backend/backend
+src/edr/backend/*.exe
+**/*.out
 
 # Logs del backend
 backend.log
