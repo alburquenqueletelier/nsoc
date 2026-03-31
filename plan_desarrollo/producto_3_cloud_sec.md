@@ -1,24 +1,24 @@
-# Plan de Desarrollo: Cloud Security & AI Remediation
+# Development Plan: Cloud Security & AI Remediation
 
-## 1. Estrategia de Producto: "El Copiloto de Seguridad Cloud"
-No entregamos solo problemas (como Prowler), entregamos **soluciones**. Usamos IA Generativa para escribir el código que arregla la vulnerabilidad.
+## 1. Product Strategy: "The Cloud Security Copilot"
+We don't just deliver problems (like Prowler does) — we deliver **solutions**. We use Generative AI to write the code that fixes the vulnerability.
 
 *   **Core**: Prowler (Scanner).
-*   **Diferenciador IA**: "Remediator Bot". Traduce el hallazgo técnico en código Terraform/CloudFormation listo para aplicar.
+*   **AI Differentiator**: "Remediator Bot". Translates the technical finding into ready-to-apply Terraform/CloudFormation code.
 
-## 2. Plan de Implementación
-**Fase 1: Scanner + Contexto (Mes 1)**
-*   Ejecutar Prowler. Obtener JSON de resultados.
-*   Filtrar solo hallazgos de severidad ALTA/CRITICA.
+## 2. Implementation Plan
+**Phase 1: Scanner + Context (Month 1)**
+*   Run Prowler. Obtain JSON results.
+*   Filter only HIGH/CRITICAL severity findings.
 
-**Fase 2: Generación de Código (Mes 2)**
-*   Integrar API de OpenAI (GPT-4o mini es muy barato) o DeepSeek coder.
-*   **Prompt**: *"Actúa como experto en AWS Nivel Senior. Prowler encontró el error: 'S3 bucket x is public'. Escribe el código Terraform para remediar esto, y explica en 1 párrafo qué riesgo implica para el negocio."*
-*   El producto entrega el **PDF + un archivo .tf** listo para desplegar.
+**Phase 2: Code Generation (Month 2)**
+*   Integrate OpenAI API (GPT-4o mini is very cheap) or DeepSeek Coder.
+*   **Prompt**: *"Act as a Senior AWS Expert. Prowler found the error: 'S3 bucket x is public'. Write the Terraform code to remediate this, and explain in 1 paragraph what risk this implies for the business."*
+*   The product delivers a **PDF + a .tf file** ready to deploy.
 
-**Fase 3: Interfaz Conversacional (Mes 3)**
-*   Montar un pequeño Chatbot (Streamlit) donde el cliente pueda preguntar: "¿Qué tan segura está mi nube hoy?" y el bot responda basado en el último reporte. "Tienes 3 puertos críticos abiertos, aquí está el script para cerrarlos".
+**Phase 3: Conversational Interface (Month 3)**
+*   Set up a small Chatbot (Streamlit) where the client can ask: "How secure is my cloud today?" and the bot responds based on the latest report. "You have 3 critical open ports, here is the script to close them."
 
-## 3. Requerimientos
-*   **Costo API**: Muy bajo (centavos por reporte).
-*   **Valor Agregado**: Ahorra horas de investigación al equipo de TI del cliente.
+## 3. Requirements
+*   **API Cost**: Very low (cents per report).
+*   **Added Value**: Saves hours of research for the client's IT team.

@@ -1,52 +1,52 @@
-# Definición del Stack Tecnológico
+# Technology Stack Definition
 
-Este documento define la arquitectura técnica y las tecnologías seleccionadas para el desarrollo de la plataforma NSOC. La elección prioriza rendimiento, seguridad y mantenibilidad.
+This document defines the technical architecture and selected technologies for the NSOC platform. The choices prioritize performance, security, and maintainability.
 
-## 1. Topología del Stack
+## 1. Stack Topology
 
-| Capa | Tecnología | Justificación Técnica |
+| Layer | Technology | Technical Justification |
 | :--- | :--- | :--- |
-| **Sensor de Red / Agente** | **Rust** | **Seguridad y Rendimiento**. Al ejecutarse en el endpoint del cliente, no puede fallar (seguridad de memoria de Rust) ni consumir recursos excesivos (sin Garbage Collector). Ideal para manejo de bajo nivel de red. |
-| **Motor de IA** | **Python** | **Estándar de la Industria**. Acceso nativo a bibliotecas de ML (PyTorch, Scikit-learn, LangChain) y facilidad para prototipar lógica heurística compleja. |
-| **Backend / API** | **Go (Golang)** | **Concurrencia y Despliegue**. Excelente manejo de múltiples conexiones simultáneas (goroutines) y compilación a binario estático único, facilitando el despliegue en cualquier servidor Linux. |
-| **Frontend / GUI** | **TypeScript + Vue 3** | **Reactividad y DX**. Vue 3 (Composition API) ofrece un equilibrio perfecto entre rendimiento y facilidad de desarrollo. TypeScript añade la robustez necesaria para una aplicación de seguridad crítica. |
-| **Persistencia (Datos)** | **PostgreSQL** | **Relacional Robusto**. Para gestión de usuarios, inquilinos (tenants), configuraciones y relaciones entre activos. |
-| **Persistencia (Logs)** | **Elasticsearch** | **Búsqueda y Logs**. Motor probado para ingesta masiva de eventos de seguridad y búsquedas full-text rápidas. |
-| **Comunicación** | **REST (MVP) / gRPC (Futuro)** | Inicio simple con REST para iteración rápida. Migración a gRPC para comunicación eficiente entre microservicios cuando escale. |
-| **Mensajería** | **Directa (MVP) / NATS (Futuro)** | Inicio con llamadas directas (HTTP). Introducción de NATS JetStream para desacoplar servicios y manejar picos de carga en el futuro. |
+| **Network Sensor / Agent** | **Rust** | **Security and Performance**. Running on the client endpoint, it cannot crash (Rust's memory safety) or consume excessive resources (no Garbage Collector). Ideal for low-level network handling. |
+| **AI Engine** | **Python** | **Industry Standard**. Native access to ML libraries (PyTorch, Scikit-learn, LangChain) and ease of prototyping complex heuristic logic. |
+| **Backend / API** | **Go (Golang)** | **Concurrency and Deployment**. Excellent handling of multiple simultaneous connections (goroutines) and compilation to a single static binary, making deployment easy on any Linux server. |
+| **Frontend / GUI** | **TypeScript + Vue 3** | **Reactivity and DX**. Vue 3 (Composition API) offers a perfect balance between performance and development ease. TypeScript adds the robustness needed for a security-critical application. |
+| **Persistence (Data)** | **PostgreSQL** | **Robust Relational**. For user management, tenants, configurations, and relationships between assets. |
+| **Persistence (Logs)** | **Elasticsearch** | **Search and Logs**. Proven engine for massive security event ingestion and fast full-text searches. |
+| **Communication** | **REST (MVP) / gRPC (Future)** | Simple start with REST for fast iteration. Migration to gRPC for efficient inter-service communication at scale. |
+| **Messaging** | **Direct (MVP) / NATS (Future)** | Start with direct calls (HTTP). Introduction of NATS JetStream to decouple services and handle load spikes in the future. |
 
-## 2. Diagrama de Arquitectura (Alto Nivel)
+## 2. Architecture Diagram (High Level)
 
 ```mermaid
 graph TD
-    subgraph "Cliente (Pyme)"
-        A[Sensor Rust] -->|Logs/Alertas| B(Load Balancer)
+    subgraph "Client (SMB)"
+        A[Rust Sensor] -->|Logs/Alerts| B(Load Balancer)
         C[Browser / GUI] -->|HTTPS| B
     end
 
-    subgraph "Cloud NSOC (Backend)"
+    subgraph "NSOC Cloud (Backend)"
         B --> D[API Gateway / Backend (Go)]
-        D -->|Consultas| E[(PostgreSQL)]
-        D -->|Logs Masivos| F[(Elasticsearch)]
-        
-        D -->|Análisis Asíncrono| G[Motor IA (Python)]
-        G -->|Resultados| D
+        D -->|Queries| E[(PostgreSQL)]
+        D -->|Massive Logs| F[(Elasticsearch)]
+
+        D -->|Async Analysis| G[AI Engine (Python)]
+        G -->|Results| D
     end
 ```
 
-## 3. Estrategia de MVP (Minimum Viable Product)
-Para la primera versión funcional, simplificaremos la arquitectura ("Keep It Simple"):
-1.  **Sin Bus de Mensajes**: El Backend (Go) llamará al Motor IA (Python) vía HTTP síncrono o workers simples. NATS/Kafka se añaden solo cuando el tráfico lo exija.
-2.  **REST sobre gRPC**: Todas las comunicaciones internas serán REST JSON para facilitar depuración y desarrollo rápido.
-3.  **Monolito Modular en Go**: En lugar de microservicios puros, el backend será un solo binario bien estructurado, separando dominios lógicos.
+## 3. MVP Strategy (Minimum Viable Product)
+For the first functional version, we simplify the architecture ("Keep It Simple"):
+1.  **No Message Bus**: The Backend (Go) will call the AI Engine (Python) via synchronous HTTP or simple workers. NATS/Kafka is added only when traffic demands it.
+2.  **REST over gRPC**: All internal communications will be REST JSON for easy debugging and rapid development.
+3.  **Modular Monolith in Go**: Instead of pure microservices, the backend will be a single well-structured binary, separating logical domains.
 
-## 4. Justificación de Decisiones Clave
+## 4. Key Decision Justifications
 
-### Por qué Rust en el Agente?
-Los agentes EDR corren en el kernel o cerca de él. Un "Panico" en Go o una excepción en Python podrían ser fatales o costosos en recursos. Rust garantiza `memory safety` sin overhead.
+### Why Rust for the Agent?
+EDR agents run at or near the kernel level. A "Panic" in Go or an exception in Python could be fatal or resource-costly. Rust guarantees `memory safety` without overhead.
 
-### Por qué Python para IA?
-Aunque Go/Rust son rápidos, la ecosistema de IA (Hugging Face, Drivers de GPU, Librerías de Tensores) vive en Python. No reinventaremos la rueda.
+### Why Python for AI?
+Although Go/Rust are fast, the AI ecosystem (Hugging Face, GPU Drivers, Tensor Libraries) lives in Python. We won't reinvent the wheel.
 
-### Por qué Vue 3 y no React?
-Preferencia por la separación clara de HTML/JS/CSS y la reactividad fina de la Composition API, que encaja bien con paneles de control de datos en tiempo real.
+### Why Vue 3 and not React?
+Preference for the clear separation of HTML/JS/CSS and the fine-grained reactivity of the Composition API, which fits well with real-time data control panels.

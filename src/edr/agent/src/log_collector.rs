@@ -1,17 +1,30 @@
 use std::fs::File;
 use std::io::{BufRead, BufReader, Seek, SeekFrom};
-use std::path::Path;
 use std::time::Duration;
 use tokio::time::sleep;
+use reqwest::Client;
+use serde::Serialize;
+use sysinfo::System;
+
+#[derive(Serialize, Debug)]
+pub struct LogEntry {
+    pub hostname: String,
+    pub log: String,
+    pub timestamp: String,
+}
 
 pub struct LogCollector {
     file_path: String,
+    client: Client,
+    base_url: String,
 }
 
 impl LogCollector {
-    pub fn new(file_path: &str) -> Self {
+    pub fn new(file_path: &str, client: Client, base_url: &str) -> Self {
         Self {
             file_path: file_path.to_string(),
+            client,
+            base_url: base_url.to_string(),
         }
     }
 
@@ -34,6 +47,7 @@ impl LogCollector {
 
         let mut reader = BufReader::new(file);
         let mut line = String::new();
+        let logs_url = format!("{}/logs", self.base_url);
 
         loop {
             line.clear();
@@ -43,9 +57,31 @@ impl LogCollector {
                     sleep(Duration::from_millis(500)).await;
                 }
                 Ok(_) => {
-                    // Print the new line (trim to remove newline at the end)
-                    if !line.trim().is_empty() {
-                        println!("[LogCollector] NEW LOG: {}", line.trim());
+                    let trimmed = line.trim();
+                    if !trimmed.is_empty() {
+                        println!("[LogCollector] NEW LOG: {}", trimmed);
+
+                        let entry = LogEntry {
+                            hostname: System::host_name().unwrap_or_else(|| "unknown".to_string()),
+                            log: trimmed.to_string(),
+                            timestamp: chrono::Utc::now().to_rfc3339(),
+                        };
+
+                        // Fire-and-forget POST to backend
+                        let client = self.client.clone();
+                        let url = logs_url.clone();
+                        tokio::spawn(async move {
+                            match client.post(&url).json(&entry).send().await {
+                                Ok(resp) => {
+                                    if !resp.status().is_success() {
+                                        eprintln!("[LogCollector] Backend returned: {}", resp.status());
+                                    }
+                                }
+                                Err(e) => {
+                                    eprintln!("[LogCollector] Failed to POST log: {}", e);
+                                }
+                            }
+                        });
                     }
                 }
                 Err(e) => {

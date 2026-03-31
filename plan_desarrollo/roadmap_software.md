@@ -1,75 +1,75 @@
-# Roadmap de Desarrollo de Software (Técnico)
+# Software Development Roadmap (Technical)
 
-Este documento detalla los módulos de software a construir para cada producto, asignando las tecnologías definidas en el stack tecnológico.
+This document details the software modules to build for each product, assigning the technologies defined in the tech stack.
 
-## 1. Producto EDR: Sentinel AI
+## 1. EDR Product: Sentinel AI
 
-### A. Agente de Endpoint (Rust)
-*   **Responsabilidad**: Recolección de telemetría y ejecución de respuestas.
-*   **Módulos**:
-    *   `LogCollector`: Lectura eficiente de logs del sistema (Syslog/Windows Event Log).
-    *   `ProcessMonitor`: Monitoreo de creación de procesos y uso de red.
-    *   `CommandExecutor`: Ejecución de acciones de mitigación (ej. bloquear IP vía iptables, matar proceso) recibidas del Backend.
-    *   `Heartbeat`: Comunicación segura (mTBS) con el Backend.
+### A. Endpoint Agent (Rust)
+*   **Responsibility**: Telemetry collection and response execution.
+*   **Modules**:
+    *   `LogCollector`: Efficient reading of system logs (Syslog/Windows Event Log).
+    *   `ProcessMonitor`: Monitoring of process creation and network usage.
+    *   `CommandExecutor`: Execution of mitigation actions (e.g., block IP via iptables, kill process) received from the Backend.
+    *   `Heartbeat`: Secure communication (mTLS) with the Backend.
 
-### B. Motor de Análisis (Python)
-*   **Responsabilidad**: Detección de anomalías basada en reglas e IA.
-*   **Módulos**:
-    *   `LogParser`: Normalización de eventos recibidos.
-    *   `AnomalyModel`: Implementación de Isolation Forest / Autoencoder básico para detectar desviaciones estadísticas.
-    *   `LLMClient`: Interfaz con Ollama/Llama-3 para análisis semántico (ej. "Explica esta línea de comando sospechosa").
+### B. Analysis Engine (Python)
+*   **Responsibility**: Rule-based and AI-driven anomaly detection.
+*   **Modules**:
+    *   `LogParser`: Normalization of received events.
+    *   `AnomalyModel`: Implementation of Isolation Forest / basic Autoencoder to detect statistical deviations.
+    *   `LLMClient`: Interface with Ollama/Llama-3 for semantic analysis (e.g., "Explain this suspicious command line").
 
 ### C. Backend (Go)
-*   **Responsabilidad**: Gestión de agentes y orquestación de alertas.
-*   **Módulos**:
-    *   `AgentAPI`: Endpoints REST para recibir telemetría de agentes.
-    *   `AlertManager`: Lógica de deduplicación y severidad de alertas.
-    *   `NotificationService`: Integración con Email/Slack.
+*   **Responsibility**: Agent management and alert orchestration.
+*   **Modules**:
+    *   `AgentAPI`: REST endpoints to receive telemetry from agents.
+    *   `AlertManager`: Alert deduplication and severity logic.
+    *   `NotificationService`: Email/Slack integration.
 
 ### D. Frontend (Vue 3 + TS)
-*   **Componentes**:
-    *   `AgentList`: Tabla de estado de sensores conectados.
-    *   `ThreatMap`: Visualización de alertas activas.
-    *   `InvestigationView`: Chat contextual con la IA sobre una alerta específica.
+*   **Components**:
+    *   `AgentList`: Table showing connected sensor status.
+    *   `ThreatMap`: Active alert visualization.
+    *   `InvestigationView`: Contextual AI chat about a specific alert.
 
 ---
 
-## 2. Producto ZTNA: Identity Risk Engine
+## 2. ZTNA Product: Identity Risk Engine
 
-### A. Sensor de Red (Rust/Go - Integración)
-*   **Nota**: Aquí usaremos principalmente la integración con **NetBird (Go)**, pero podríamos necesitar un 'sidecar' en Rust si requerimos inspección de paquetes profunda.
-*   **Módulo Custom**:
-    *   `NetLogShipper`: Servicio ligero que envía logs de conexión (NetBird) al motor de análisis en tiempo real.
+### A. Network Sensor (Rust/Go — Integration)
+*   **Note**: Here we'll primarily use **NetBird (Go)** integration, but we may need a Rust 'sidecar' if deep packet inspection is required.
+*   **Custom Module**:
+    *   `NetLogShipper`: Lightweight service that sends connection logs (NetBird) to the analysis engine in real time.
 
-### B. Motor de Riesgo (Python)
-*   **Responsabilidad**: Calcular el "Trust Score" de cada usuario.
-*   **Módulos**:
-    *   `UEBA_Engine`: Modelo (Random Forest) entrenado con: Hora, GeoIP, Dispositivo, Recurso.
-    *   `PolicyEnforcer`: Si Score < Umbral -> Llamar API de NetBird para bloquear peer.
+### B. Risk Engine (Python)
+*   **Responsibility**: Calculate each user's "Trust Score".
+*   **Modules**:
+    *   `UEBA_Engine`: Model (Random Forest) trained with: Time, GeoIP, Device, Resource.
+    *   `PolicyEnforcer`: If Score < Threshold -> Call NetBird API to block peer.
 
 ### C. Backend (Go)
-*   **Responsabilidad**: API para configuración de políticas y proxy de NetBird.
-*   **Módulos**:
-    *   `PolicyAPI`: CRUD de reglas de riesgo (ej. "Bloquear si accede desde país X").
-    *   `UserSync`: Sincronización de usuarios con IdP (Google/Microsoft).
+*   **Responsibility**: API for policy configuration and NetBird proxy.
+*   **Modules**:
+    *   `PolicyAPI`: CRUD for risk rules (e.g., "Block if accessing from country X").
+    *   `UserSync`: User synchronization with IdP (Google/Microsoft).
 
 ---
 
-## 3. Producto Cloud Sec: Remediator
+## 3. Cloud Security Product: Remediator
 
 ### A. Scanner Runner (Go)
-*   **Responsabilidad**: Ejecución eficiente de herramientas de terceros (Prowler).
-*   **Módulos**:
-    *   `JobScheduler`: Cola de trabajos para ejecutar escaneos programados.
-    *   `ProwlerWrapper`: Ejecución controlada de Prowler y captura de salida JSON.
+*   **Responsibility**: Efficient execution of third-party tools (Prowler).
+*   **Modules**:
+    *   `JobScheduler`: Job queue for running scheduled scans.
+    *   `ProwlerWrapper`: Controlled execution of Prowler and JSON output capture.
 
-### B. Generador de Remedios (Python)
-*   **Responsabilidad**: Traducir hallazgos a código IaC.
-*   **Módulos**:
-    *   `PromptBuilder`: Construcción de contextos para el LLM (Hallazgo + Contexto de Infraestructura).
-    *   `CodeCleaner`: Validación básica del código Terraform generado (linter).
+### B. Remedy Generator (Python)
+*   **Responsibility**: Translate findings into IaC code.
+*   **Modules**:
+    *   `PromptBuilder`: Context construction for the LLM (Finding + Infrastructure Context).
+    *   `CodeCleaner`: Basic validation of generated Terraform code (linter).
 
 ### C. Frontend (Vue 3 + TS)
-*   **Componentes**:
-    *   `CloudHealthDashboard`: Gráficos de cumplimiento (CIS Benchmark).
-    *   `RemediationCenter`: Lista de fallos con botón "Generar Fix" y editor de código integrado (Monaco Editor) para previsualizar el Terraform.
+*   **Components**:
+    *   `CloudHealthDashboard`: Compliance charts (CIS Benchmark).
+    *   `RemediationCenter`: List of findings with "Generate Fix" button and integrated code editor (Monaco Editor) to preview the Terraform.

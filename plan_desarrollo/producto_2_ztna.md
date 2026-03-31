@@ -1,26 +1,26 @@
-# Plan de Desarrollo: ZTNA Inteligente (Low Resource)
+# Development Plan: Smart ZTNA (Low Resource)
 
-## 1. Estrategia de Producto: "Acceso Adaptativo"
-Las VPNs son tontas (si tienes la llave, entras). Nuestro ZTNA usa IA para entender el contexto del usuario.
+## 1. Product Strategy: "Adaptive Access"
+VPNs are dumb (if you have the key, you're in). Our ZTNA uses AI to understand the user's context.
 
 *   **Core**: NetBird / Headscale.
-*   **Diferenciador IA**: "Identity Risk Engine". Un servicio paralelo que monitorea los logs de acceso de la red overlay.
+*   **AI Differentiator**: "Identity Risk Engine". A parallel service that monitors the access logs of the overlay network.
 
-## 2. Plan de Implementación
-**Fase 1: Conectividad Base (Mes 1)**
-*   Despliegue estándar de NetBird/Headscale.
-*   Asegurar que los logs de conexión (quién, desde qué IP, a qué recurso) se guarden centralizadamente.
+## 2. Implementation Plan
+**Phase 1: Base Connectivity (Month 1)**
+*   Standard deployment of NetBird/Headscale.
+*   Ensure connection logs (who, from which IP, to which resource) are stored centrally.
 
-**Fase 2: UEBA (User and Entity Behavior Analytics) "Light" (Mes 2)**
-*   Desarrollar un "vigilante" (Python script) que use un modelo de Random Forest (Scikit-learn, muy liviano) entrenado con los logs.
-*   **Features**: Hora del día, GeoIP, Volumen de Datos, Servidor Destino.
-*   Entrenar modelo con 30 días de datos "limpios".
-*   Detectar outliers: "¿Por qué el usuario de Marketing está intentando acceder por SSH al servidor de Base de Datos?".
+**Phase 2: UEBA (User and Entity Behavior Analytics) "Light" (Month 2)**
+*   Develop a "watchdog" (Python script) that uses a Random Forest model (Scikit-learn, very lightweight) trained on the logs.
+*   **Features**: Time of day, GeoIP, Data Volume, Destination Server.
+*   Train model with 30 days of "clean" data.
+*   Detect outliers: "Why is the Marketing user trying to SSH into the Database server?"
 
-**Fase 3: Bloqueo Dinámico (Mes 3)**
-*   Si el "Risk Score" sube de 80, el script llama a la API del Control Plane y deshabilita la llave del usuario temporalmente.
-*   Notificación vía Slack/Teams al admin: "Usuario bloqueado por comportamiento anómalo. ¿Aprobar acceso?".
+**Phase 3: Dynamic Blocking (Month 3)**
+*   If the "Risk Score" goes above 80, the script calls the Control Plane API and temporarily disables the user's key.
+*   Notification via Slack/Teams to admin: "User blocked due to anomalous behavior. Approve access?"
 
-## 3. Requerimientos
-*   **Hardware**: Mismo VPS del controlador ZTNA. El modelo de Machine Learning clásico (Random Forest) consume muy poca CPU/RAM.
+## 3. Requirements
+*   **Hardware**: Same VPS as the ZTNA controller. The classic Machine Learning model (Random Forest) consumes very little CPU/RAM.
 *   **Stack**: Python, Pandas, Scikit-learn.

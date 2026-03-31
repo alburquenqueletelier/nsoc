@@ -3,6 +3,17 @@
 # Ensure we are in the project root
 cd "$(dirname "$0")"
 
+# Load .env if present — exports all variables to child processes
+if [ -f .env ]; then
+    set -a
+    # shellcheck source=.env
+    source .env
+    set +a
+    echo "[NSOC] Loaded .env"
+else
+    echo "[NSOC] No .env file found — using default values"
+fi
+
 # Check if mprocs is installed
 if ! command -v mprocs &> /dev/null; then
     echo "mprocs could not be found. Please install it first."

@@ -64,3 +64,9 @@ Thumbs.db
 *.tmp
 tmp/
 temp/
+
+########################
+# Secretos
+########################
+.env*
+!.env.example
